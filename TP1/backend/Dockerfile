@@ -5,8 +5,8 @@ WORKDIR $MYAPP_HOME
 
 RUN apk add --no-cache maven
 
-COPY pom.xml .
-COPY src ./src
+COPY simpleapi/pom.xml .
+COPY simpleapi/src ./src
 RUN mvn package -DskipTests
 
 # Run stage
