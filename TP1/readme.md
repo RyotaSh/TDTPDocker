@@ -58,3 +58,27 @@ docker build -t spring-backend:latest .
 docker run -d --name spring-backend --network app-network -p 8080:8080 spring-backend:latest
 ## Test the API
 curl "http://localhost:8080/?name=Alice"
+
+### HTTP STAGE 
+build : docker build -t my-apache . in TP1/HTTP
+then run : docker run -d --name apache-web --network app-network -p 80:80 my-apache
+
+### 1-5 Why do we need a reverse proxy?
+A reverse proxy sits between users and your server to forward requests , improving security.
+
+### 1-6 Why is Docker Compose important?
+Docker Compose simplifies managing multi-container applications. Instead of manually starting, stopping, or linking containers, you define all services in a single YAML file. Then you can start everything with one command (docker compose up) and manage dependencies, networks, and volumes consistently.
+
+### 1-7 Docker Compose most important commands:
+docker compose up -d  Build and start all services in detached mode.
+docker compose down  Stop and remove containers, networks, and volumes created by up
+docker compose ps
+### 1-8 Document your docker-compose.yml file:
+Services:
+
+backend: Spring Boot application, depends on database. Configured with environment variables for DB connection.
+database: PostgreSQL, persistent storage via named volume postgres-data. Not exposed to host
+httpd: Apache reverse proxy, depends on backend. Exposes port 80 to the host
+Volumes:
+
+postgres-data persists database data across container restarts.

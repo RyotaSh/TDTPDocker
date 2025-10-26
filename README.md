@@ -58,3 +58,10 @@ docker build -t spring-backend:latest .
 docker run -d --name spring-backend --network app-network -p 8080:8080 spring-backend:latest
 ## Test the API
 curl "http://localhost:8080/?name=Alice"
+
+
+### HTTP STAGE 
+build : docker build -t my-apache . in TP1/HTTP
+then run : docker run -d --name apache-web --network app-network -p 80:80 my-apache
+
+### 1-5 Why do we need a reverse proxy?
