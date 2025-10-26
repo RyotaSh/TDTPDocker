@@ -64,4 +64,33 @@ curl "http://localhost:8080/?name=Alice"
 build : docker build -t my-apache . in TP1/HTTP
 then run : docker run -d --name apache-web --network app-network -p 80:80 my-apache
 
+
+Test the API
+curl "http://localhost:8080/?name=Alice"
+
+HTTP STAGE
+build : docker build -t my-apache . in TP1/HTTP then run : docker run -d --name apache-web --network app-network -p 80:80 my-apache
+
 ### 1-5 Why do we need a reverse proxy?
+A reverse proxy sits between users and your server to forward requests , improving security.
+
+### 1-6 Why is Docker Compose important?
+Docker Compose simplifies managing multi-container applications. Instead of manually starting, stopping, or linking containers, you define all services in a single YAML file. Then you can start everything with one command (docker compose up) and manage dependencies, networks, and volumes consistently.
+
+### 1-7 Docker Compose most important commands:
+docker compose up -d Build and start all services in detached mode. docker compose down Stop and remove containers, networks, and volumes created by up docker compose ps
+
+### 1-8 Document your docker-compose.yml file:
+Services:
+
+backend: Spring Boot application, depends on database. Configured with environment variables for DB connection. database: PostgreSQL, persistent storage via named volume postgres-data. Not exposed to host httpd: Apache reverse proxy, depends on backend. Exposes port 80 to the host Volumes:
+
+postgres-data persists database data across container restarts.
+
+### 1-9 Document your publication commands and published images in dockerhub.
+give a name to them : docker tag my-postgres-db chengboss/my-postgres-db:1.0
+
+docker tag spring-backend chengboss/spring-backend:1.0 docker tag my-apache chengboss/my-apache:1.0 then push them docker push chengboss/my-postgres-db:1.0 docker push chengboss/spring-backend:1.0 docker push chengboss/my-apache:1.0
+
+### 1-10 Why do we put our images into an online repo?
+We put our images into an online repository (like Docker Hub) so other team members or machines can pull and run the same images easily, ensuring consistency and easy deployment.
