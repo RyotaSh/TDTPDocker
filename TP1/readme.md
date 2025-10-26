@@ -82,3 +82,17 @@ httpd: Apache reverse proxy, depends on backend. Exposes port 80 to the host
 Volumes:
 
 postgres-data persists database data across container restarts.
+
+### 1-9 Document your publication commands and published images in dockerhub.
+give a name to them :
+docker tag my-postgres-db chengboss/my-postgres-db:1.0
+>> docker tag spring-backend chengboss/spring-backend:1.0
+>> docker tag my-apache chengboss/my-apache:1.0
+then push them 
+docker push chengboss/my-postgres-db:1.0
+>> docker push chengboss/spring-backend:1.0
+>> docker push chengboss/my-apache:1.0
+
+### 1-10 Why do we put our images into an online repo?
+
+We put our images into an online repository (like Docker Hub) so other team members or machines can pull and run the same images easily, ensuring consistency and easy deployment.
