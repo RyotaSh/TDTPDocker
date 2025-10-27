@@ -24,6 +24,6 @@ jobs:
 
      #finally build your app with the latest command
       - name: Build and test with Maven
-        working-directory: TP1/backend/simpleapi
+        working-directory: ./TP1/backend/simpleapi
         run: mvn clean verify
         
