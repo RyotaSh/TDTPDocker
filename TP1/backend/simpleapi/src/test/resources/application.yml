@@ -8,7 +8,6 @@ spring:
     generate-ddl: false
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://postgres-db:5432/db
+    url: jdbc:tc:postgresql:15:///db
     username: usr
     password: pwd
-
