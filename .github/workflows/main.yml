@@ -29,8 +29,8 @@ jobs:
       - name: SonarCloud analysis
         working-directory: ./TP1/backend/simpleapi
         run: mvn -B verify sonar:sonar \
-          -Dsonar.projectKey=<your-project-key> \
-          -Dsonar.organization=<your-organization> \
+          -Dsonar.projectKey=ryotash \
+          -Dsonar.organization=RyotaSh \
           -Dsonar.host.url=https://sonarcloud.io \
           -Dsonar.login=${{ secrets.SONAR_TOKEN }}
 
