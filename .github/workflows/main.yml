@@ -26,49 +26,47 @@ jobs:
         working-directory: ./TP1/backend/simpleapi
         run: mvn clean verify
 
+  # define job to build and publish docker image
+  build-and-push-docker-image:
+    needs: test-backend
+    # run only when code is compiling and tests are passing
+    runs-on: ubuntu-24.04
 
-# define job to build and publish docker image
-build-and-push-docker-image:
-  needs: test-backend
-  # run only when code is compiling and tests are passing
-  runs-on: ubuntu-24.04
+    # steps to perform in job
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-  # steps to perform in job
-  steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-    - name: Log in to Docker Hub
-      uses: docker/login-action@v2
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      - name: Build image and push backend
+        uses: docker/build-push-action@v6
+        with:
+          # relative path to the place where source code with Dockerfile is located
+          context: TP1/backend
+          file: TP1/backend/Dockerfile
+          push: true
+          # Note: tags has to be all lower-case
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/tp-devops-simple-api
 
-    - name: Build image and push backend
-      uses: docker/build-push-action@v6
-      with:
-        # relative path to the place where source code with Dockerfile is located
-        context: TP1/backend
-        file: TP1/backend/Dockerfile
-        push: true
-        # Note: tags has to be all lower-case
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/tp-devops-simple-api
+      - name: Build image and push database
+        uses: docker/build-push-action@v6
+        with:
+          # Build custom database image
+          context: TP1
+          file: TP1/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/tp-devops-db
 
-    - name: Build image and push database
-      uses: docker/build-push-action@v6
-      with:
-        # DO the same for database
-        context: TP1
-        file: TP1/Dockerfile
-        push: true
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/tp-devops-db
-
-    - name: Build image and push httpd
-      uses: docker/build-push-action@v6
-      with:
-        # DO the same for httpd
-        context: TP1/HTTP
-        file: TP1/HTTP/Dockerfile
-        push: true
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/tp-devops-httpd
-
+      - name: Build image and push httpd
+        uses: docker/build-push-action@v6
+        with:
+          # Build httpd image
+          context: TP1/http
+          file: TP1/http/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/tp-devops-httpd
