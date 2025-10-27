@@ -30,8 +30,8 @@ jobs:
         working-directory: ./TP1/backend/simpleapi
         run: |
           mvn -B verify sonar:sonar \
-            -Dsonar.projectKey=ryotash \
-            -Dsonar.organization=RyotaSh \
+            -Dsonar.projectKey=RyotaSh_TDTPDocker \
+            -Dsonar.organization=Ryotash \
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.login=${{ secrets.SONAR_TOKEN }}
 
