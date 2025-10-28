@@ -11,6 +11,8 @@
     name: my_app # Name of the container
     image: chengboss/tp-devops-simple-api # Backend API image
     env_file: /home/admin/.env
+    pull : yes
+    recreate : true
     networks:
       - name: my_network    # Connect container to the Docker network
       - name: my_network_front
