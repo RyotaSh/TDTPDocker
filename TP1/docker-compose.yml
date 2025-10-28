@@ -15,8 +15,8 @@ services:
     restart: unless-stopped
 
   database:
-    image: my-postgres-db
-    container_name: postgres-db
+    image: postgres-db
+    container_name: postgres-container
     networks:
       - app-network
     environment:

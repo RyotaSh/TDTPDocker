@@ -95,3 +95,133 @@ docker push chengboss/my-postgres-db:1.0
 ### 1-10 Why do we put our images into an online repo?
 
 We put our images into an online repository (like Docker Hub) so other team members or machines can pull and run the same images easily, ensuring consistency and easy deployment.
+
+
+###### RELAUNCH EVERYTHING ON A NEW PC :
+# Créer le réseau Docker:
+docker network create app-network
+
+# Construire l’image Postgres : Depuis C:\Users\Cheng\Documents\GitHub\TDTPDocker\TP1 :
+docker build -t my-postgres .
+
+# Lancer le conteneur Postgres sur app-network avec le bon nom:
+docker run -d `
+  --name postgres-db `
+  --network app-network `
+  -e POSTGRES_DB=db `
+  -e POSTGRES_USER=usr `
+  -e POSTGRES_PASSWORD=pwd `
+  -p 5432:5432 `
+  my-postgres
+
+# Construire l’image Spring Boot:
+docker build -t spring-backend .
+
+# Lancer Spring Boot sur app-network
+docker run -d `
+  --name spring-backend `
+  --network app-network `
+  -p 8080:8080 `
+  spring-backend
+
+#   Construire l’image HTTP (Apache + Proxy) 
+  Depuis C:\Users\Cheng\Documents\GitHub\TDTPDocker\TP1\HTTP :
+  docker build -t my-http .
+
+#   Lancer le conteneur HTTP sur app-network
+  docker run -d `
+  --name http-frontend `
+  --network app-network `
+  -p 80:80 `
+  my-http
+
+### C:\Users\Cheng\Documents\GitHub\TDTPDocker\TP1\backend\simpleapi\src\main\resources\application.yml remettre ca apres 28/10/2025
+  spring:
+  jpa:
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+    generate-ddl: false
+    open-in-view: true
+
+  datasource:
+    url: jdbc:postgresql://postgres-db:5432/db
+    username: usr
+    password: pwd
+    driver-class-name: org.postgresql.Driver
+
+management:
+  server:
+    add-application-context-header: false
+  endpoints:
+    web:
+      exposure:
+        include: health,info,env,metrics,beans,configprops
+
+
+
+
+### 3-1 Document your inventory and base commands
+all: top-level group for all hosts.
+
+vars: variables applied to all hosts.
+
+ansible_user: SSH user.
+
+ansible_ssh_private_key_file: path to your private key.
+
+children: sub-groups.
+
+prod: production group with your server hostname.
+## base command
+ansible all -i inventories/setup.yml -m ping
+
+ansible all -i inventories/setup.yml -m setup ####gather facts get system info
+
+ansible all -i inventories/setup.yml -m setup -a "filter=ansible_distribution*" ###filter specific fact
+
+ansible all -i inventories/setup.yml -m apt -a "name=package_name state=present" --become install package
+
+ansible all -i inventories/setup.yml -m apt -a "name=apache2 state=absent" --become remove package
+
+ansible-playbook -i inventories/setup.yml playbook.yml
+## step for setup
+# Install WSL (Windows Subsystem for Linux) and Ansible there
+wsl --install -d Ubuntu
+
+Then inside Ubuntu:
+sudo apt update
+sudo apt install ansible -y 
+
+then test with : 
+ansible all -i /mnt/c/Users/Cheng/Documents/GitHub/TDTPDocker/ansible/inventories/setup.yml -m ping
+# Copy the key into your WSL home
+cp /mnt/c/Users/Cheng/Documents/GitHub/TDTPDocker/ansible/inventories/id_rsa ~/.ssh/id_rsa
+# Set proper permissions
+chmod 600 ~/.ssh/id_rsa
+
+Then update your setup.yml inventory to point to the new path:
+ansible_ssh_private_key_file: ~/.ssh/id_rsa
+
+ansible all -i setup.yml -m ping should work again.
+
+
+### Docker installed on remote server
+To check execute this in ubuntu after you installed it :
+ansible all -i inventories/setup.yml -m command -a "docker --version"
+### 3-2 Document your playbook
+my playbook is light and short because i've put everything inside main.yml in docker and i execute those taks using docker role
+### what a docker_container task should look like:
+- name: Run HTTPD
+  docker_container:
+    name: httpd
+    image: your image name from DockerHub.
+### 3-3 Document your docker_container tasks configuration.
+
+### Is it really safe to deploy automatically every new image on the hub ? explain. What can I do to make it more secure?
+It is not really safe to deploy automatically every new image from Docker Hub, because images could contain bugs, vulnerabilities, or even malicious code. Automatic deployment bypasses testing and validation, which increases the risk of breaking your application or exposing it to security issues. To make it more secure, you should deploy only trusted, tested images, use fixed tags instead of latest, and implement a staging environment or manual approval step before deploying to production..
+
+
+###
