@@ -52,7 +52,7 @@ my playbook is light and short because i've put everything inside main.yml in do
 - name: Run HTTPD
   docker_container:
     name: httpd
-    image: your image name from DockerHub
+    image: your image name from DockerHub.
 ### 3-3 Document your docker_container tasks configuration.
 
 ###
