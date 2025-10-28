@@ -79,13 +79,13 @@ jobs:
           file: TP1/HTTP/Dockerfile 
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/tp-devops-httpd
-          
+
       # 🆕 Build image and push front
       - name: Build image and push front
         uses: docker/build-push-action@v6
         with:
-          context: TP1/front
-          file: TP1/front/Dockerfile
+          context: ./front
+          file: ./front/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/tp-devops-simple-front
 
