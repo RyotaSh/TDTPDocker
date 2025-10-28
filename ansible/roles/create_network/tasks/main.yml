@@ -1,0 +1,13 @@
+---
+# tasks file for create_network
+- name: Create Docker network
+  docker_network:
+    name: my_network
+    state: present
+  
+
+- name: Create Docker network
+  docker_network:
+    name: my_network_front
+    state: present
+

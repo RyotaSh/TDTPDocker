@@ -1,0 +1,11 @@
+---
+# tasks file for launch_proxy
+- name: Run HTTPD container
+  docker_container:
+    name: httpd
+    image: chengboss/tp-devops-httpd
+    networks:
+      - name: my_network_front
+    ports:
+      - "80:80" #port
+    

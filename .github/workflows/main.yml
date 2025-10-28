@@ -26,6 +26,15 @@ jobs:
         working-directory: ./TP1/backend/simpleapi
         run: mvn clean verify
 
+      - name: SonarCloud analysis
+        working-directory: ./TP1/backend/simpleapi
+        run: |
+          mvn -B verify sonar:sonar \
+            -Dsonar.projectKey=RyotaSh_TDTPDocker \
+            -Dsonar.organization=ryotash \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+
   # define job to build and publish docker image
   build-and-push-docker-image:
     needs: test-backend
@@ -67,6 +76,27 @@ jobs:
         with:
           # Build httpd image
           context: TP1/HTTP
-          file: TP1/HTTP/Dockerfile
+          file: TP1/HTTP/Dockerfile 
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/tp-devops-httpd
+
+  deploy:
+    needs: build-and-push-docker-image
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up SSH key
+        uses: webfactory/ssh-agent@v0.8.1
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Install Ansible
+        run: |
+          sudo apt update
+          sudo apt install -y ansible
+
+      - name: Deploy application on remote server
+        run: |
+          ansible-playbook -i ansible/inventories/setup.yml ansible/playbook.yml
