@@ -79,6 +79,15 @@ jobs:
           file: TP1/HTTP/Dockerfile 
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/tp-devops-httpd
+          
+      # 🆕 Build image and push front
+      - name: Build image and push front
+        uses: docker/build-push-action@v6
+        with:
+          context: TP1/front
+          file: TP1/front/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/tp-devops-simple-front
 
   deploy:
     needs: build-and-push-docker-image
@@ -91,7 +100,7 @@ jobs:
         uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-          
+
       - name: Add remote host to known_hosts
         run: |
           mkdir -p ~/.ssh

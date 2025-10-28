@@ -1,0 +1,13 @@
+---
+# tasks file for roles/launch_front
+---
+- name: Run frontend container
+  docker_container:
+    name: my_front
+    image: chengboss/tp-devops-simple-front
+    pull: yes
+    recreate: true
+    ports:
+      - "80:80"
+    networks:
+      - name: my_network_front
