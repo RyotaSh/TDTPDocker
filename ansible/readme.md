@@ -56,7 +56,7 @@ my playbook is light and short because i've put everything inside main.yml in do
 ### 3-3 Document your docker_container tasks configuration.
 
 ### Is it really safe to deploy automatically every new image on the hub ? explain. What can I do to make it more secure?
-It is not really safe to deploy automatically every new image from Docker Hub, because images could contain bugs, vulnerabilities, or even malicious code. Automatic deployment bypasses testing and validation, which increases the risk of breaking your application or exposing it to security issues. To make it more secure, you should deploy only trusted, tested images, use fixed tags instead of latest, and implement a staging environment or manual approval step before deploying to production.
+It is not really safe to deploy automatically every new image from Docker Hub, because images could contain bugs, vulnerabilities, or even malicious code. Automatic deployment bypasses testing and validation, which increases the risk of breaking your application or exposing it to security issues. To make it more secure, you should deploy only trusted, tested images, use fixed tags instead of latest, and implement a staging environment or manual approval step before deploying to production..
 
 
 ###

@@ -51,7 +51,6 @@ ENV MYAPP_HOME=/opt/myapp & WORKDIR $MYAPP_HOME - Same directory structure
 COPY --from=myapp-build $MYAPP_HOME/target/*.jar $MYAPP_HOME/myapp.jar - Copies only the JAR
 ENTRYPOINT ["java", "-jar", "myapp.jar"] - Runs the app
 
-
 ### Quick Start this part
 cd backend/simpleapi
 docker build -t spring-backend:latest .
