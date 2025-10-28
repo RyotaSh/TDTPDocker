@@ -91,6 +91,12 @@ jobs:
         uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          
+      - name: Add remote host to known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.KNOWN_HOSTS }}" >> ~/.ssh/known_hosts
+
 
       - name: Install Ansible
         run: |
@@ -100,3 +106,4 @@ jobs:
       - name: Deploy application on remote server
         run: |
           ansible-playbook -i ansible/inventories/setup.yml ansible/playbook.yml
+        
